@@ -34,6 +34,8 @@
 #include "..\..\include\xeniface_ioctls.h"
 #include "log.h"
 
+#include <OpenXTV4VInterface.h>
+
 #define XENSTORE_ABS_PATH_MAX 3072
 #define XENSTORE_REL_PATH_MAX 2048
 
@@ -1827,6 +1829,44 @@ XenIFaceIoctl(
 
     case IOCTL_XENIFACE_GNTTAB_UNMAP_FOREIGN_PAGES:
         status = IoctlGnttabUnmapForeignPages(Fdo, (PCHAR)Buffer, InLen, OutLen);
+        break;
+
+    case V4V_IOCTL_INITIALIZE_32:
+    case V4V_IOCTL_INITIALIZE:
+        status = V4VInitialize((PCHAR)Buffer, InLen, Stack, Irp);
+        break;
+
+    case V4V_IOCTL_BIND:
+        status = V4VBind(Fdo, (PCHAR)Buffer, InLen, Stack);
+        break;
+
+    case V4V_IOCTL_LISTEN:
+        status = V4VListen((PCHAR)Buffer, InLen, Stack);
+        break;
+
+    case V4V_IOCTL_ACCEPT_32:
+    case V4V_IOCTL_ACCEPT:
+        status = V4VAccept(Fdo, (PCHAR)Buffer, InLen, Stack, Irp);
+        break;
+
+    case V4V_IOCTL_CONNECT:
+        status = V4VConnect(Fdo, (PCHAR)Buffer, InLen, Stack, Irp);
+        break;
+
+    case V4V_IOCTL_WAIT:
+        status = V4VConnectWait(Fdo, (PCHAR)Buffer, InLen, Stack, Irp);
+        break;
+
+    case V4V_IOCTL_DISCONNECT:
+        status = V4VDisconnect(Fdo, Stack);
+        break;
+
+    case V4V_IOCTL_GETINFO:
+        status = V4VGetInfo((PCHAR)Buffer, InLen, Stack);
+        break;
+
+    case V4V_IOCTL_DUMPRING:
+        status = V4VDumpRing(Stack);
         break;
 
     default:
